@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class MyPlayerMovement : MonoBehaviour
 {
     // config params
     [SerializeField] float moveSpeed = 10f;
