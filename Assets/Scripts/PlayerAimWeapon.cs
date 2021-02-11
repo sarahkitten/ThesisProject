@@ -67,6 +67,7 @@ public class PlayerAimWeapon : MonoBehaviour {
             Vector3 mousePosition = UtilsClass.GetMouseWorldPosition();
 
             aimAnimator.SetTrigger("Shoot");
+            // original code-- I'll write as a coroutine
             //OnShoot?.Invoke(this, new OnShootEventArgs { 
             //     gunEndPointPosition = aimGunEndPointTransform.position,
             //     shootPosition = mousePosition,
