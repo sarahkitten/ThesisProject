@@ -31,6 +31,10 @@ public class PlayerAimWeapon : MonoBehaviour {
     private Transform aimShellPositionTransform;
     private Animator aimAnimator;
 
+    [Header("Projectile")]
+    [SerializeField] GameObject grapplePrefab;
+    [SerializeField] float projectileSpeed = 10f;
+
     private void Awake() {
         playerLookAt = GetComponent<PlayerLookAt>();
         aimTransform = transform.Find("Aim");
@@ -65,9 +69,25 @@ public class PlayerAimWeapon : MonoBehaviour {
     private void HandleShooting() {
         if (Input.GetMouseButtonDown(0)) {
             Vector3 mousePosition = UtilsClass.GetMouseWorldPosition();
-
             aimAnimator.SetTrigger("Shoot");
-            // original code-- I'll write as a coroutine
+
+            // destroy previous grapple
+            GameObject abortedGrapple = GameObject.FindWithTag("Grapple");
+            if (abortedGrapple) { 
+                Destroy(abortedGrapple); 
+            }
+
+            // shoot grapple
+            GameObject grapple = Instantiate(
+                grapplePrefab, 
+                aimGunEndPointTransform.position, 
+                Quaternion.identity) as GameObject;
+            grapple.GetComponent<Rigidbody2D>().velocity = new Vector2(0, projectileSpeed);
+            // previous line will just shoot straight up: needs to shoot towards mouse
+            // set shootPosition = mousePosition
+            
+            
+            // original code
             //OnShoot?.Invoke(this, new OnShootEventArgs { 
             //     gunEndPointPosition = aimGunEndPointTransform.position,
             //     shootPosition = mousePosition,
