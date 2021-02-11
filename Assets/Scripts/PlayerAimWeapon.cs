@@ -18,22 +18,24 @@ using CodeMonkey.Utils;
 
 public class PlayerAimWeapon : MonoBehaviour {
 
-    public event EventHandler<OnShootEventArgs> OnShoot;
-    public class OnShootEventArgs : EventArgs {
-        public Vector3 gunEndPointPosition;
-        public Vector3 shootPosition;
-        public Vector3 shellPosition;
-    }
+    // public event EventHandler<OnShootEventArgs> OnShoot;
+    // public class OnShootEventArgs : EventArgs {
+    //     public Vector3 gunEndPointPosition;
+    //     public Vector3 shootPosition;
+    //     public Vector3 shellPosition;
+    // }
 
     private PlayerLookAt playerLookAt;
     private Transform aimTransform;
-    private Transform aimGunEndPointTransform;
+    public Transform aimGunEndPointTransform;
     private Transform aimShellPositionTransform;
     private Animator aimAnimator;
+    
 
     [Header("Projectile")]
     [SerializeField] GameObject grapplePrefab;
-    [SerializeField] float projectileSpeed = 10f;
+    public float projectileSpeed = 10f;
+    public Vector3 shootPosition;
 
     private void Awake() {
         playerLookAt = GetComponent<PlayerLookAt>();
@@ -78,13 +80,13 @@ public class PlayerAimWeapon : MonoBehaviour {
             }
 
             // shoot grapple
+            shootPosition = mousePosition;
             GameObject grapple = Instantiate(
                 grapplePrefab, 
                 aimGunEndPointTransform.position, 
                 Quaternion.identity) as GameObject;
-            grapple.GetComponent<Rigidbody2D>().velocity = new Vector2(0, projectileSpeed);
+            // grapple.GetComponent<Rigidbody2D>().velocity = new Vector2(0, projectileSpeed);
             // previous line will just shoot straight up: needs to shoot towards mouse
-            // set shootPosition = mousePosition
             
             
             // original code

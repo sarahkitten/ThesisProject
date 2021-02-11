@@ -2,41 +2,61 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// based on: https://youtu.be/P-UscoFwaE4
+// linerenderer based on: https://youtu.be/P-UscoFwaE4
 
 public class Grappler : MonoBehaviour
 {
 
-    public Camera mainCamera;
     public LineRenderer lineRenderer;
-    public DistanceJoint2D distanceJoint;
+    private float speed;
+    private Vector3 target;
+    private PlayerAimWeapon playerAimWeapon;
+    private GameObject player;
+    private bool moveOut = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        distanceJoint.enabled = false;
+        lineRenderer.enabled = true;
+        player = GameObject.Find("Player");
+        playerAimWeapon = player.GetComponent<PlayerAimWeapon>();
+        target = playerAimWeapon.shootPosition;
+        speed = playerAimWeapon.projectileSpeed;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            Vector2 mousePos = (Vector2)mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            lineRenderer.SetPosition(0, mousePos);
-            lineRenderer.SetPosition(1, transform.position);
-            distanceJoint.connectedAnchor = mousePos;
-            distanceJoint.enabled = true;
-            lineRenderer.enabled = true;
+        Move();
+        HandleLineRenderer();
+    }
+
+    void HandleLineRenderer() {
+        lineRenderer.SetPosition(0, playerAimWeapon.aimGunEndPointTransform.position);
+        lineRenderer.SetPosition(1, transform.position);
+        //Debug.Log("gun endpoint position: " + playerAimWeapon.aimGunEndPointTransform.position);
+        //Debug.Log("grapple position: " + transform.position);
+    }
+
+    void Move() {
+        if (!moveOut) {
+            target = playerAimWeapon.aimGunEndPointTransform.position;
         }
-        else if (Input.GetKeyUp(KeyCode.Mouse0))
-        {
-            distanceJoint.enabled = false;
-            lineRenderer.enabled = false;
+        transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * speed);
+        if (transform.position == target) {
+            if (moveOut){
+                target = playerAimWeapon.aimGunEndPointTransform.position;  // move back towards player
+                moveOut = false;
+            } else {
+                Destroy(gameObject);
+            }
+
+            
         }
-        if (distanceJoint.enabled)
-        {
-            lineRenderer.SetPosition(1, transform.position);
+        else {      // move towards player
+
         }
+        
     }
 }
