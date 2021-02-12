@@ -13,6 +13,7 @@ public class Grappler : MonoBehaviour
     private PlayerAimWeapon playerAimWeapon;
     private GameObject player;
     private bool moveOut = true;
+    private bool collided = false;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,7 @@ public class Grappler : MonoBehaviour
     void Update()
     {
         Move();
+        PlayerMove();
         HandleLineRenderer();
     }
 
@@ -40,23 +42,38 @@ public class Grappler : MonoBehaviour
     }
 
     void Move() {
-        if (!moveOut) {
-            target = playerAimWeapon.aimGunEndPointTransform.position;
+        if (!collided) {
+            if (!moveOut) {
+                target = playerAimWeapon.aimGunEndPointTransform.position;
+            }
+            transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * speed);
+            if (transform.position == target) {
+                if (moveOut){
+                    target = playerAimWeapon.aimGunEndPointTransform.position;  // move back towards player
+                    moveOut = false;
+                } else {
+                    Destroy(gameObject);
+                }
+            }
         }
-        transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * speed);
-        if (transform.position == target) {
-            if (moveOut){
-                target = playerAimWeapon.aimGunEndPointTransform.position;  // move back towards player
-                moveOut = false;
-            } else {
+    }
+
+    void PlayerMove() {
+        if (collided) {
+            player.transform.position = Vector3.MoveTowards(player.transform.position, target, Time.deltaTime * speed);
+            if (transform.position == target) {
+                Debug.Log("Grapple destroyed because player reached target");
                 Destroy(gameObject);
             }
-
-            
         }
-        else {      // move towards player
+    }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Grapplable") {
+            Debug.Log("Grapple collision registered with " + collision.tag);
+            collided = true;
+            target = collision.transform.position;
         }
-        
     }
 }
