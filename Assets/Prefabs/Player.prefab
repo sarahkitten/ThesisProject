@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 2799618262662711646}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -233,10 +233,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccd666001598b3445b95d44769be8b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootPosition: {x: 0, y: 0, z: 0}
+  aimGunEndPointTransform: {fileID: 0}
   grapplePrefab: {fileID: 2990587152318952943, guid: d1242c5b75a30ad46be1e256051483b3,
     type: 3}
   projectileSpeed: 10
+  shootPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &2799618262662711642
 MonoBehaviour:
   m_ObjectHideFlags: 0

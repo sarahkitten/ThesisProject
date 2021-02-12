@@ -75,5 +75,11 @@ public class Grappler : MonoBehaviour
             collided = true;
             target = collision.transform.position;
         }
+        else if (collision.tag == "Player") {
+            if (collided) {
+                Debug.Log("Grapple destroyed because player collided with grapple");
+                Destroy(gameObject);
+            }
+        }
     }
 }
