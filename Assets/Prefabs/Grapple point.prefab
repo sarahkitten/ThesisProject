@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6962505215188381329}
   - component: {fileID: 6962505215188381330}
   - component: {fileID: 6962505215188381331}
+  - component: {fileID: 829250917825248731}
   m_Layer: 0
   m_Name: Grapple point
   m_TagString: Grapplable
@@ -98,3 +99,15 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.445
+--- !u!114 &829250917825248731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962505215188381332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc724ab13f05387428ce9c4e1a22b264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

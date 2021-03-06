@@ -18,6 +18,7 @@ public class PlayerAimWeapon : MonoBehaviour {
     public Transform aimGunEndPointTransform;
     private Transform aimShellPositionTransform;
     private Animator aimAnimator;
+    private Player playerScript;
     
 
     [Header("Projectile")]
@@ -31,6 +32,7 @@ public class PlayerAimWeapon : MonoBehaviour {
         aimAnimator = aimTransform.GetComponent<Animator>();
         aimGunEndPointTransform = aimTransform.Find("GunEndPointPosition");
         aimShellPositionTransform = aimTransform.Find("ShellPosition");
+        playerScript = gameObject.GetComponent<Player>();
     }
 
     private void Update() {
@@ -61,28 +63,26 @@ public class PlayerAimWeapon : MonoBehaviour {
             Vector3 mousePosition = UtilsClass.GetMouseWorldPosition();
             aimAnimator.SetTrigger("Shoot");
 
-            // destroy previous grapple
-            GameObject abortedGrapple = GameObject.FindWithTag("Grapple");
-            if (abortedGrapple) { 
-                Destroy(abortedGrapple); 
+            if (playerScript.has_projectile_item_grappled) {
+                // shoot grappled item
+                playerScript.shootItemFromHere(aimGunEndPointTransform);
             }
+            else {  
+                Debug.Log("no item equipped, shooting grapple");
+                // shoot grapple
+                // destroy previous grapple
+                GameObject abortedGrapple = GameObject.FindWithTag("Grapple");
+                if (abortedGrapple) { 
+                    Destroy(abortedGrapple); 
+                }
 
-            // shoot grapple
-            shootPosition = mousePosition;
-            GameObject grapple = Instantiate(
-                grapplePrefab, 
-                aimGunEndPointTransform.position, 
-                Quaternion.identity) as GameObject;
-            // grapple.GetComponent<Rigidbody2D>().velocity = new Vector2(0, projectileSpeed);
-            // previous line will just shoot straight up: needs to shoot towards mouse
-            
-            
-            // original code
-            //OnShoot?.Invoke(this, new OnShootEventArgs { 
-            //     gunEndPointPosition = aimGunEndPointTransform.position,
-            //     shootPosition = mousePosition,
-            //     shellPosition = aimShellPositionTransform.position,
-            //});
+                // shoot grapple
+                shootPosition = mousePosition;
+                GameObject grapple = Instantiate(
+                    grapplePrefab, 
+                    aimGunEndPointTransform.position, 
+                    Quaternion.identity) as GameObject;
+            }  
         }
     }
 

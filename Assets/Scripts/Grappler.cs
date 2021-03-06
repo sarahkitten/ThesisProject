@@ -11,9 +11,11 @@ public class Grappler : MonoBehaviour
     private float speed;
     private Vector3 target;
     private PlayerAimWeapon playerAimWeapon;
+    private Player playerScript;
     private GameObject player;
     private bool moveOut = true;
     private bool collided = false;
+    private Collider2D grappledObjCollider;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +23,7 @@ public class Grappler : MonoBehaviour
         lineRenderer.enabled = true;
         player = GameObject.Find("Player");
         playerAimWeapon = player.GetComponent<PlayerAimWeapon>();
+        playerScript = player.GetComponent<Player>();
         target = playerAimWeapon.shootPosition;
         speed = playerAimWeapon.projectileSpeed;
         
@@ -63,21 +66,27 @@ public class Grappler : MonoBehaviour
             player.transform.position = Vector3.MoveTowards(player.transform.position, target, Time.deltaTime * speed);
             if (transform.position == target) {
                 Debug.Log("Grapple destroyed because player reached target");
+                playerScript.set_collision_as_equipped_projectile(grappledObjCollider.gameObject);
                 Destroy(gameObject);
             }
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Grapplable") {
+            grappledObjCollider = collision;
             Debug.Log("Grapple collision registered with " + collision.tag);
             collided = true;
             target = collision.transform.position;
+            // Here if the object can be used as a projectile it should revolve around the player
+            // first refactor the code and make sure it still works
+            
         }
         else if (collision.tag == "Player") {
             if (collided) {
                 Debug.Log("Grapple destroyed because player collided with grapple");
+                playerScript.set_collision_as_equipped_projectile(grappledObjCollider.gameObject);
                 Destroy(gameObject);
             }
         }
