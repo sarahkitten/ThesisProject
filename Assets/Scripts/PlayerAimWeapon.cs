@@ -62,6 +62,7 @@ public class PlayerAimWeapon : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             Vector3 mousePosition = UtilsClass.GetMouseWorldPosition();
             aimAnimator.SetTrigger("Shoot");
+            shootPosition = mousePosition;
 
             if (playerScript.has_projectile_item_grappled) {
                 // shoot grappled item
@@ -77,7 +78,6 @@ public class PlayerAimWeapon : MonoBehaviour {
                 }
 
                 // shoot grapple
-                shootPosition = mousePosition;
                 GameObject grapple = Instantiate(
                     grapplePrefab, 
                     aimGunEndPointTransform.position, 

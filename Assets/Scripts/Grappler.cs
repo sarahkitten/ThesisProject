@@ -66,7 +66,9 @@ public class Grappler : MonoBehaviour
             player.transform.position = Vector3.MoveTowards(player.transform.position, target, Time.deltaTime * speed);
             if (transform.position == target) {
                 Debug.Log("Grapple destroyed because player reached target");
-                playerScript.set_collision_as_equipped_projectile(grappledObjCollider.gameObject);
+                if (grappledObjCollider.tag == "Grapple projectile") {
+                    playerScript.set_collision_as_equipped_projectile(grappledObjCollider.gameObject);
+                }
                 Destroy(gameObject);
             }
         }
@@ -74,7 +76,7 @@ public class Grappler : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Grapplable") {
+        if ((collision.tag == "Grapple projectile") || (collision.tag == "Grapple point")) {
             grappledObjCollider = collision;
             Debug.Log("Grapple collision registered with " + collision.tag);
             collided = true;
@@ -86,7 +88,9 @@ public class Grappler : MonoBehaviour
         else if (collision.tag == "Player") {
             if (collided) {
                 Debug.Log("Grapple destroyed because player collided with grapple");
-                playerScript.set_collision_as_equipped_projectile(grappledObjCollider.gameObject);
+                if (grappledObjCollider.tag == "Grapple projectile") {
+                    playerScript.set_collision_as_equipped_projectile(grappledObjCollider.gameObject);
+                }
                 Destroy(gameObject);
             }
         }
